@@ -89,10 +89,38 @@
                 </a>
             </li>  
             <li>
-                <a href="{:url('news/lst')}">
+                <a href="{:url('article/lst')}">
                     <span class="menu-text">文章管理</span>
                 </a>
             </li>                             
+        </ul>                            
+    </li>  
+    <li>
+        <a href="#" class="menu-dropdown">
+            <i class="menu-icon fa fa-chain"></i>
+            <span class="menu-text">友情链接</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">            
+            <li>
+                <a href="{:url('link/lst')}">
+                    <span class="menu-text">链接管理</span>
+                </a>
+            </li>                             
+        </ul>                            
+    </li>  
+    <li>
+        <a href="#" class="menu-dropdown">
+            <i class="menu-icon fa fa-picture-o"></i>
+            <span class="menu-text">图片管理</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{:url('article/imglist')}">
+                    <span class="menu-text">图片列表</span>
+                </a>
+            </li>                           
         </ul>                            
     </li>  
     <li>
@@ -152,13 +180,13 @@
         </a>
         <ul class="submenu">
             <li>
-                <a href="/admin/document/index.html">
-                    <span class="menu-text">商店设置</span>
+                <a href="{:url('config/lst')}">
+                    <span class="menu-text">配置项</span>
                 </a>
             </li> 
             <li>
-                <a href="/admin/document/index.html">
-                    <span class="menu-text">会员注册项设置</span>
+                <a href="{:url('config/configlist')}">
+                    <span class="menu-text">配置管理</span>
                 </a>
             </li> 
             <li>

@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 use think\Controller;
 use app\admin\model\Cate as CateModel;
+use app\admin\model\Article as ArticleModel;
 use catetree\Catetree;
 class Cate extends Controller
 {
@@ -37,11 +38,11 @@ class Cate extends Controller
                 $data["cate_type"]=3;
             }
             //验证
-            //$validate = validate('Brand');
-            //if(!$validate->check($data)){
-                //$this->error($validate->getError());
-                //die;
-            //} 
+            $validate = validate('Cate');
+            if(!$validate->check($data)){
+                $this->error($validate->getError());
+                die;
+            } 
     		$add = CateModel::insert($data);
     		if($add){
     			$this->success("增加分类成功！",'lst');
@@ -70,11 +71,11 @@ class Cate extends Controller
                 $data["cate_type"]=3;
             }  		
     		//验证
-    		//$validate = validate('brand');
-    		//if(!$validate->check($data)){
-    			//$this->error($validate->getError());
-    			//die;
-    		//} 	 
+            $validate = validate('Cate');
+            if(!$validate->check($data)){
+                $this->error($validate->getError());
+                die;
+            } 	 
     		$save = CateModel::update($data);
     		if($save!==false){  //在没有值变更的时候，会返回0，所以用false;
     			$this->success("修改分类成功！",'lst');
@@ -108,7 +109,19 @@ class Cate extends Controller
             $this->error("系统内置文章分类不允许删除!");
             die;
         }
-        $del = CateModel::delete($del);
+        //删除文章前应该先删除该分类下的文章和缩略图        
+        foreach ($cateTreeId as $k => $v) {
+            $artRes = ArticleModel::field('id,thumb')->where(array('cate_id'=>$v))->select();
+            foreach ($artRes as $k1 => $v1) {
+                $thumbSrc = IMG_UPLOADS.$v1["thumb"];
+                if(file_exists($thumbSrc)){
+                    @unlink($thumbSrc);
+                }
+                ArticleModel::where(array('id'=>$v1['id']))->delete();
+            }
+        }
+
+        $del = CateModel::where('id','in',$cateTreeId)->delete();
         if($del){
             $this->success("删除分类成功！",'lst');
         }else{

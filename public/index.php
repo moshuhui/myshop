@@ -14,5 +14,9 @@
 // 定义应用目录
 define('APP_PATH', __DIR__ . '/../clin_app/');
 define('IMG_UPLOADS', __DIR__ . '/../public/static/uploads/');
+//图片管理定义常量
+define('UEDITOR', __DIR__ . '/../../ueditor');
+define('HTTP_UEDITOR', '/ueditor');
+define('DEL_UEDITOR', __DIR__ .'../../..');
 // 加载框架引导文件
 require __DIR__ . '/../thinkphp/start.php';

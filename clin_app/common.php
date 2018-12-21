@@ -10,6 +10,23 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+//图片资源处理函数
+function my_scandir($dir=UEDITOR){
+   $files=array();
+   $list_dir = scandir($dir);
+   foreach ($list_dir as $v) {
+      if($v!='.' && $v!='..'){
+         if(is_dir($dir.'/'.$v)){
+            $files[$v] = my_scandir($dir.'/'.$v);
+         }else{
+            $files[] = $dir.'/'.$v;
+         }
+
+      }
+   }   
+   return $files;
+}
+//字符串几截取函数
 function cut_str($sourcestr,$cutlength)
 {
    $returnstr='';

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    <title>配置项列表</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__admin__/style/bootstrap.css" rel="stylesheet">
+    <link href="__admin__/style/font-awesome.css" rel="stylesheet">
+    <link href="__admin__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__admin__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__admin__/style/demo.css" rel="stylesheet">
+    <link href="__admin__/style/typicons.css" rel="stylesheet">
+    <link href="__admin__/style/animate.css" rel="stylesheet">
+    
+</head>
+<body>
+	<!-- 头部 -->
+	{include file="common/top"}
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+			            <!-- Page Sidebar -->
+            <div class="page-sidebar" id="sidebar">
+                <!-- Page Sidebar Header-->
+                <div class="sidebar-header-wrapper">
+                    <input class="searchinput" type="text">
+                    <i class="searchicon fa fa-search"></i>
+                    <div class="searchhelper">Search Reports, Charts, Emails or Notifications</div>
+                </div>
+                <!-- /Page Sidebar Header -->
+                <!-- Sidebar Menu -->
+                {include file="common/left"}
+                <!-- /Sidebar Menu -->
+            </div>
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li><a href="{:url('index/index')}">系统</a></li>
+                        <li class="active">配置项列表</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">            
+            <div class="tabbable">
+                <ul class="nav nav-tabs tabs-flat" id="myTab11">
+                    <li class="active">
+                        <a data-toggle="tab" href="#home11">
+                            店铺配置
+                        </a>
+                    </li>
+                    <li class="">
+                        <a data-toggle="tab" href="#profile11">
+                             商品配置
+                        </a>
+                    </li>
+                </ul>                                    
+                <div class="tab-content tabs-flat">
+                    <div id="home11" class="tab-pane active">
+                        <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                            <?php foreach($ShopConfigRes as $k => $v):?>
+                            <div class="form-group">
+                                <label for="ename" class="col-sm-2 control-label no-padding-right"><?php echo $v['cname'];?></label>
+                                <div class="col-sm-6">
+                                    <!--文本框-->
+                                    <?php if($v['form_type']=='input'):?>
+                                        <input class="form-control" id="<?php echo $v['ename'];?>" placeholder="" name="<?php echo $v['ename'];?>" required="" type="text" value="<?php echo $v['config_value'];?>">
+                                    <!--单选框-->    
+                                    <?php elseif($v['form_type']=='radio'):?>
+                                        <?php if($v['config_values']!=''):
+                                            $arr = explode(',',$v['config_values']);
+                                            foreach($arr as $k1 => $v1){
+                                            ?>
+                                        <div class="radio" style="float: left; margin-left: 15px;">
+                                            <label>
+                                                <input name="$v['ename']}" type="radio" value="{$v1}"  {if condition="$v['config_value'] eq $v1"} checked {/if} class="colored-blue">
+                                                <span class="text">{$v1}</span>
+                                            </label>
+                                        </div>
+                                        <?php 
+                                            }
+                                            endif; ?>
+                                    <!--下拉框-->
+                                    <?php elseif($v['form_type']=='select'):?>
+                                        <select name="{$v['ename']}" style="width: 100%;">
+                                           <?php 
+                                            if($v['config_values']!=''):
+                                                $arr = explode(',',$v['config_values']);
+                                                foreach($arr as $k1 => $v1){
+                                                ?>
+                                                <option {if condition="$v['config_value'] eq $v1"} selected="selected" {/if} value="{$v1}">{$v1}</option> 
+                                            <?php 
+                                                }
+                                                endif; 
+                                            ?>                                          
+                                        </select>
+                                     <?php elseif($v['form_type']=='textarea'):?>
+                                         <textarea class="form-control" name="{$v['ename']}" id="{$v['ename']}">{$v['config_value']}</textarea>                                    
+                                    <?php elseif($v['form_type']=='checkbox'):?>
+                                        <?php if($v['config_values']!=''):
+                                            $arr = explode(',',$v['config_values']);
+                                            $arr2 = explode(',',$v['config_value']);
+                                            foreach($arr as $k1 => $v1){
+                                            ?>
+                                        <div class="checkbox" style="float: left; margin-left: 15px;">
+                                            <label>
+                                                <input name="{$v['ename']}[]" type="checkbox" value="{$v1}"  {if condition="in_array($v1,$arr2)"} checked {/if} class="colored-blue">
+                                                <span class="text">{$v1}</span>
+                                            </label>
+                                        </div>
+                                        <?php 
+                                            }
+                                            endif; ?>  
+                                         <?php elseif($v['form_type']=='file'):?>
+                                         <input id="{$v['ename']}" placeholder="" name="{$v['ename']}"  type="file">
+                                            <?php if($v['config_value']):?>
+                                                <img src="__uploads__/{$v['config_value']}" height="30">
+                                            <?php else: ?>
+                                                暂无图片
+                                            <?php endif;?>                                      
+                                    <?php endif; ?>
+                                </div>
+                            </div>  
+                            <?php endforeach; ?> 
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">保存信息</button>
+                                </div>
+                            </div>                     
+                        </form>                                   
+                    </div>
+
+                   <div id="profile11" class="tab-pane">
+                        
+                            <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                            <?php foreach($GoodsConfigRes as $k => $v):?>
+                            <div class="form-group">
+                                <label for="ename" class="col-sm-2 control-label no-padding-right"><?php echo $v['cname'];?></label>
+                                <div class="col-sm-6">
+                                    <!--文本框-->
+                                    <?php if($v['form_type']=='input'):?>
+                                        <input class="form-control" id="<?php echo $v['ename'];?>" placeholder="" name="<?php echo $v['ename'];?>" required="" type="text" value="<?php echo $v['config_value'];?>">
+                                    <!--单选框-->    
+                                    <?php elseif($v['form_type']=='radio'):?>
+                                        <?php if($v['config_values']!=''):
+                                            $arr = explode(',',$v['config_values']);
+                                            foreach($arr as $k1 => $v1){
+                                            ?>
+                                        <div class="radio" style="float: left; margin-left: 15px;">
+                                            <label>
+                                                <input name="$v['ename']}" type="radio" value="{$v1}"  {if condition="$v['config_value'] eq $v1"} checked {/if} class="colored-blue">
+                                                <span class="text">{$v1}</span>
+                                            </label>
+                                        </div>
+                                        <?php 
+                                            }
+                                            endif; ?>
+                                    <!--下拉框-->
+                                    <?php elseif($v['form_type']=='select'):?>
+                                        <select name="{$v['ename']}" style="width: 100%;">
+                                           <?php 
+                                            if($v['config_values']!=''):
+                                                $arr = explode(',',$v['config_values']);
+                                                foreach($arr as $k1 => $v1){
+                                                ?>
+                                                <option {if condition="$v['config_value'] eq $v1"} selected="selected" {/if} value="{$v1}">{$v1}</option> 
+                                            <?php 
+                                                }
+                                                endif; 
+                                            ?>                                          
+                                        </select>
+                                     <?php elseif($v['form_type']=='textarea'):?>
+                                         <textarea class="form-control" name="{$v['ename']}" id="{$v['ename']}">{$v['config_value']}</textarea>                                    
+                                    <?php elseif($v['form_type']=='checkbox'):?>
+                                        <?php if($v['config_values']!=''):
+                                            $arr = explode(',',$v['config_values']);
+                                            $arr2 = explode(',',$v['config_value']);
+                                            foreach($arr as $k1 => $v1){
+                                            ?>
+                                        <div class="checkbox" style="float: left; margin-left: 15px;">
+                                            <label>
+                                                <input name="{$v['ename']}[]" type="checkbox" value="{$v1}"  {if condition="in_array($v1,$arr2)"} checked {/if} class="colored-blue">
+                                                <span class="text">{$v1}</span>
+                                            </label>
+                                        </div>
+                                        <?php 
+                                            }
+                                            endif; ?>  
+                                         <?php elseif($v['form_type']=='file'):?>
+                                         <input id="{$v['ename']}" placeholder="" name="{$v['ename']}"  type="file">
+                                            <?php if($v['config_value']):?>
+                                                <img src="__uploads__/{$v['config_value']}" height="30">
+                                            <?php else: ?>
+                                                暂无图片
+                                            <?php endif;?>                                      
+                                    <?php endif; ?>
+                                </div>
+                            </div>  
+                            <?php endforeach; ?> 
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">保存信息</button>
+                                </div>
+                            </div>                     
+                        </form>                   
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__admin__/style/jquery_002.js"></script>
+    <script src="__admin__/style/bootstrap.js"></script>
+    <script src="__admin__/style/jquery.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__admin__/style/beyond.js"></script>
+    
+
+
+</body></html>
